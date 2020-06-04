@@ -1,0 +1,1 @@
+* version **0.1.0** : original version with the basic functions used to estimate the radial velocity in stellar spectra
