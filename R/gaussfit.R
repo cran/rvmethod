@@ -303,7 +303,8 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
     return(mean((flx[keep] - fitted[keep])^2))
   }
   if(cores > 1){
-    mse = unlist(parallel::mclapply(c(1:(dim(ftrs)[1])), msefunc, mc.cores = cores))
+    mse = unlist(parallel::mclapply(c(1:(length(ftrs$wvbounds)[1])), 
+                                    msefunc, mc.cores = cores))
   }else{
     mse = sapply(c(1:(length(ftrs$wvbounds)[1])), msefunc)
   }
@@ -415,7 +416,7 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
     mse = sapply(c(1:length(ftrs$Wv_lbounds)), msefunc)
   }
 
-  fittype = rep(0, dim(ftrs)[1])
+  fittype = rep(0, length(ftrs$wvbounds)[1])
   fittype[which(!(c(1:length(fittype)) %in% gdfits))] = 2
   ftrs$FitType = fittype
   ftrs = ftrs[ftrs$FitType == 0,]
