@@ -240,6 +240,8 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
   a2_0 = 1 - min(flx[w])
   mu2_0 = wvl[w][which.min(flx[w])]
   sig2_0 = (ftrs$wvbounds[[length(mus)]][2] - ftrs$wvbounds[[length(mus)]][1])/5
+  w = which((wvl >= ftrs$wvbounds[[length(mus)-1]][1]) &
+              (wvl <= ftrs$wvbounds[[length(mus)]][2]))
   mdl = tryCatch(nls(flx[w] ~ gauss2func(wvl[w], a1, a2, mu1, mu2, sig1, sig2),
                      start = list(a1 = a1_0, a2 = a2_0, mu1 = mu1_0, mu2 = mu2_0,
                                   sig1 = sig1_0, sig2 = sig2_0),
@@ -259,7 +261,7 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
   }
 
   w = which((wvl >= ftrs$wvbounds[[1]][1]) &
-              (wvl <= ftrs$wvbounds[[2]][2]))
+              (wvl <= ftrs$wvbounds[[1]][2]))
   a1_0 = 1 - min(flx[w])
   mu1_0 = wvl[w][which.min(flx[w])]
   sig1_0 = (ftrs$wvbounds[[1]][2] - ftrs$wvbounds[[1]][1])/5
@@ -268,6 +270,8 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
   a2_0 = 1 - min(flx[w])
   mu2_0 = wvl[w][which.min(flx[w])]
   sig2_0 = (ftrs$wvbounds[[2]][2] - ftrs$wvbounds[[2]][1])/5
+  w = which((wvl >= ftrs$wvbounds[[1]][1]) &
+              (wvl <= ftrs$wvbounds[[2]][2]))
   mdl = tryCatch(nls(flx[w] ~ gauss2func(wvl[w], a1, a2, mu1, mu2, sig1, sig2),
                      start = list(a1 = a1_0, a2 = a2_0, mu1 = mu1_0, mu2 = mu2_0,
                                   sig1 = sig1_0, sig2 = sig2_0),
@@ -291,7 +295,7 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
   ftrs$Gauss_sig = sigs
 
   fitted = rep(1, length(wvl))
-  for(i in 1:(length(ftrs$wvbounds)[1])){
+  for(i in 1:(length(ftrs$wvbounds))){
     w = which((wvl >= ftrs$wvbounds[[i]][1] - 2) & (wvl <= ftrs$wvbounds[[i]][1] + 2))
     fitted[w] = fitted[w] - ftrs$Gauss_amp[i]*gaussfunc(wvl[w], ftrs$Gauss_mu[i],
                                                         ftrs$Gauss_sig[i])
@@ -303,7 +307,7 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
     return(mean((flx[keep] - fitted[keep])^2))
   }
   if(cores > 1){
-    mse = unlist(parallel::mclapply(c(1:(length(ftrs$wvbounds)[1])), 
+    mse = unlist(parallel::mclapply(c(1:(length(ftrs$wvbounds))), 
                                     msefunc, mc.cores = cores))
   }else{
     mse = sapply(c(1:(length(ftrs$wvbounds)[1])), msefunc)
@@ -416,7 +420,7 @@ Gaussfit = function(wvl, flx, ftrs, cores=1,
     mse = sapply(c(1:length(ftrs$Wv_lbounds)), msefunc)
   }
 
-  fittype = rep(0, length(ftrs$wvbounds)[1])
+  fittype = rep(0, length(ftrs$Wv_lbounds))
   fittype[which(!(c(1:length(fittype)) %in% gdfits))] = 2
   ftrs$FitType = fittype
   ftrs = ftrs[ftrs$FitType == 0,]

@@ -1,7 +1,7 @@
 Package: rvmethod
 Type: Package
 Title: Radial Velocity Method for Detecting Exoplanets
-Version: 0.1.1
+Version: 0.1.2
 Author: Parker Holzer
 Maintainer: Parker Holzer <parker.holzer@yale.edu>
 Description: Has various functions designed to implement the 
@@ -23,6 +23,6 @@ RoxygenNote: 7.1.0
 Imports: parallel, locfit, assertthat
 Depends: R (>= 2.10)
 NeedsCompilation: no
-Packaged: 2020-07-27 15:06:46 UTC; parkerholzer
+Packaged: 2020-08-07 22:20:11 UTC; parkerholzer
 Repository: CRAN
-Date/Publication: 2020-07-27 15:40:02 UTC
+Date/Publication: 2020-08-10 11:50:03 UTC
